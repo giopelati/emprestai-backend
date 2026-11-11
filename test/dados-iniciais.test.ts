@@ -136,8 +136,11 @@ describe('Spec 002 — dados iniciais', () => {
     ).rejects.toThrow('640×480, esperado 800×600');
   });
 
-  it('CA-04: origem fora de images.pexels.com é recusada', async () => {
-    expect(() => lib.urlRecortada('https://example.com/foto.jpg')).toThrow('Origem não permitida');
+  it('CA-04: origem fora de live.staticflickr.com é recusada', async () => {
+    expect(() => lib.urlTamanho800('https://example.com/foto.jpg')).toThrow('Origem não permitida');
+    expect(lib.urlTamanho800('https://live.staticflickr.com/27/49153471_90f62cf926_b.jpg')).toBe(
+      'https://live.staticflickr.com/27/49153471_90f62cf926_c.jpg',
+    );
     await expect(lib.baixarJpeg('https://example.com/foto.jpg')).rejects.toThrow(
       'Origem não permitida',
     );
@@ -145,7 +148,7 @@ describe('Spec 002 — dados iniciais', () => {
 
   it('CA-04: foto repetida é recusada pela skill e pelo banco', async () => {
     const creditos = creditosDeTeste(equipamentos);
-    creditos[1].pexels_id = creditos[0].pexels_id;
+    creditos[1].foto_id = creditos[0].foto_id;
     expect(() => enviar.validarCreditos(creditos, equipamentos)).toThrow('repetida');
 
     const [primeiro] = await lerEquipamentos();
@@ -184,9 +187,18 @@ describe('Spec 002 — dados iniciais', () => {
     for (const linha of await lerEquipamentos()) {
       expect(linha.foto_pexels_id).toBeGreaterThan(0);
       expect(linha.foto_fotografo).not.toBe('');
-      expect(linha.foto_fotografo_url).toMatch(/^https:\/\/www\.pexels\.com\//);
-      expect(linha.foto_pagina_url).toMatch(/^https:\/\/www\.pexels\.com\//);
-      expect(linha.foto_licenca).toContain('Pexels');
+      expect(linha.foto_fotografo_url).toMatch(/^https:\/\/www\.flickr\.com\//);
+      expect(linha.foto_pagina_url).toMatch(/^https:\/\/www\.flickr\.com\/photos\//);
+      expect(linha.foto_licenca).toMatch(/^(CC0|CC BY|Marca de Domínio Público)/);
+    }
+  });
+
+  it('CA-05: só licenças CC0, domínio público ou CC BY são aceitas (C5)', () => {
+    expect(lib.textoLicenca({ license: 'by', license_version: '2.0', license_url: 'https://creativecommons.org/licenses/by/2.0/' })).toBe(
+      'CC BY 2.0 — https://creativecommons.org/licenses/by/2.0/',
+    );
+    for (const license of ['by-sa', 'by-nc', 'by-nd']) {
+      expect(() => lib.textoLicenca({ license, license_url: 'x' })).toThrow('Licença não aceita');
     }
   });
 

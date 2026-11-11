@@ -174,12 +174,12 @@ export interface EquipamentoTeste {
 export function creditosDeTeste(equipamentos: EquipamentoTeste[], base = 900000) {
   return equipamentos.map((e, i) => ({
     patrimonio: e.patrimonio,
-    pexels_id: base + i,
+    foto_id: base + i,
     fotografo: `Fotógrafo ${i}`,
-    fotografo_url: `https://www.pexels.com/@teste-${i}`,
-    pagina_url: `https://www.pexels.com/photo/${base + i}/`,
-    download_url: `https://images.pexels.com/photos/${base + i}/pexels-photo-${base + i}.jpeg`,
-    licenca: 'Licença Pexels — https://www.pexels.com/license/',
+    fotografo_url: `https://www.flickr.com/photos/teste-${i}`,
+    pagina_url: `https://www.flickr.com/photos/teste-${i}/${base + i}`,
+    download_url: `https://live.staticflickr.com/1/${base + i}_abc123_c.jpg`,
+    licenca: 'CC BY 2.0 — https://creativecommons.org/licenses/by/2.0/',
     revisado_por: 'teste automatizado',
     revisado_em: '2026-11-10T00:00:00.000Z',
   }));
