@@ -6,7 +6,17 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit --pretty false",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "test": "tsc -p tsconfig.test.json && node scripts/jest.mjs"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/dist-test/test/**/*.test.js"
+    ],
+    "transform": {},
+    "testTimeout": 60000,
+    "verbose": true
   },
   "dependencies": {
     "@nestjs/common": "12.2.0",
@@ -17,6 +27,7 @@
   },
   "devDependencies": {
     "@types/node": "26.6.2",
+    "jest": "30.5.2",
     "typescript": "5.9.3"
   }
 }
