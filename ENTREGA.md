@@ -32,6 +32,7 @@ do monorepo.
 | Precisar de schema (tabelas, RLS, bucket) | `rules/migration.md`: "estratégia não decidida, PARE" | Decidida e registrada no ADR-002 (Supabase CLI, SQL versionado); regra atualizada | Sem estratégia não havia como criar as tabelas da prática | `docs/adr/002-migrations.md`; `rules/migration.md` | `f88797a` |
 | Usar Prisma (ADR-001) e RLS (ADR-001) ao mesmo tempo | O ADR-001 contradiz a si mesmo na prática: Prisma conecta com papel privilegiado e ignora RLS | Backend fala com o PostgREST repassando o JWT da pessoa; regra atômica numa função SQL; Prisma não usado | Mantém o RLS que o ADR exige sem segredo de banco na Vercel nem biblioteca de JWT fora do ADR | `docs/adr/003-acesso-a-dados-do-backend.md` | `f88797a` |
 | Scripts de dados usarem a chave secreta | `rules/secrets.md` (rascunho): "só o backend usa" a chave secreta; ADR-003: backend não usa segredo | Chave secreta só em `.env.producao`, lida só pelos scripts de produção, que exigem TTY; regra revisada | Apontado pelo verificador no gate (rodada 1, BLOQUEADO) | spec 002 C4; `rules/secrets.md` | `8fdda33` |
+| Contrato da skill: "só a API do Pexels, com chave gratuita" | O Pexels suspendeu a emissão de chaves novas (aviso em pexels.com/api, conferido em 11/11/2026); sem chave a skill não roda | Fonte trocada para a API do Openverse (sem chave), só fotos do Flickr CC0/domínio público/CC BY; o resto do contrato fica igual (800×600 conferido, revisão humana, sem repetição, crédito). Crédito na tela passa a ser `Fotos: Openverse` | Única fonte gratuita testada que entrega 800×600 exato sem biblioteca (tamanho `_c` do Flickr); Pixabay/Unsplash exigem chave e a Wikimedia não serve 800 px | spec 002 C5 e T07; spec 003 T08; gates em `docs/specs/002-dados-iniciais/verificacoes/` (`…-gate-4f0fc54.md` NÃO CONFORME, `…-gate-e1d02e0.md` CONFORME) | `4f0fc54`, `e1d02e0`, `0af6b37` |
 
 ## 1b. Lacunas: o que foi pedido de forma incompleta
 
@@ -248,8 +249,11 @@ agora é só a pessoa, pelos scripts de produção.
 **Não ficou pronto (depende de pessoa; roteiro em
 `docs/producao/roteiro-pratica.md`):**
 
-- Fotos reais (spec 002, T05): falta a chave do Pexels e a revisão visual
-  humana. Até lá, o catálogo em produção não tem imagem.
+- Fonte das fotos (spec 002, T07; spec 003, T08): troca para o Openverse
+  (C5) com gate CONFORME; código da skill em andamento, entrega da tarefa
+  ainda não verificada. A tela ainda mostra `Fotos: Pexels` até a T08.
+- Fotos reais (spec 002, T05): falta a revisão visual humana das candidatas
+  do Openverse. Até lá, o catálogo em produção não tem imagem.
 - Produção (spec 002, T06; spec 003, T07): migrations no banco do deploy,
   dados e conta do professor, variáveis da Vercel (`CORS_ORIGIN` hoje não
   existe no backend de produção) e merge para a branch de produção.
