@@ -24,6 +24,7 @@ interface LinhaMeuEmprestimo {
     imagem_path: string;
     foto_pexels_id: number;
     foto_fotografo: string;
+    foto_licenca: string;
   };
 }
 
@@ -46,6 +47,7 @@ export interface MeuEmprestimo {
     categoria: string;
     imagemUrl: string;
     fotografo: string;
+    licenca: string;
   };
 }
 
@@ -88,7 +90,7 @@ export class EmprestimosService {
     const linhas = await this.supabase.requisitar<LinhaMeuEmprestimo[]>(
       token,
       '/emprestimos?select=id,retirado_em,devolucao_prevista,' +
-        'equipamento:equipamentos(id,patrimonio,nome,categoria,imagem_path,foto_pexels_id,foto_fotografo)' +
+        'equipamento:equipamentos(id,patrimonio,nome,categoria,imagem_path,foto_pexels_id,foto_fotografo,foto_licenca)' +
         '&devolvido_em=is.null&order=devolucao_prevista.asc,retirado_em.asc',
     );
     const hoje = hojeEmSaoPaulo();
@@ -110,6 +112,7 @@ export class EmprestimosService {
             linha.equipamento.foto_pexels_id,
           ),
           fotografo: linha.equipamento.foto_fotografo,
+          licenca: linha.equipamento.foto_licenca,
         },
       })),
     };

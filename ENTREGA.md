@@ -1,13 +1,15 @@
 # Entrega da prática
 
+> **Atualização 11/11/2026 (conflito C5 da spec 002):** o Pexels suspendeu a emissão de chaves novas. A fonte das fotos passou a ser o Openverse (fotos do Flickr, CC0/domínio público/CC BY, 800×600 conferido por código), com escolha humana entre até 6 candidatas por equipamento. Crédito na tela: `Fotos: Openverse`, fotógrafo e licença no `title`. Onde este documento diz Pexels, vale o Openverse.
+
 ## Links
 
 - Repositório (turma REST: back e front):
   - Backend: https://github.com/giopelati/emprestai-backend
   - Frontend: https://github.com/giopelati/emprestai-frontend
   - Monorepo com specs, ADRs, rules, subagente, skill e histórico citado
-    abaixo: PENDENTE (repositório `emprestai` a criar; os hashes desta
-    entrega são deste repositório).
+    abaixo: https://github.com/giopelati/emprestai (os hashes desta entrega
+    são deste repositório).
 - Produção (Vercel):
   - Frontend: https://emprestai-frontend-roan.vercel.app
   - Backend: https://emprestai-backend.vercel.app (`GET /health`)
