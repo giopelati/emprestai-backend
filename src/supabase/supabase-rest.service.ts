@@ -37,6 +37,27 @@ export class SupabaseRestService {
     return corpo as T;
   }
 
+  // Confere no Supabase Auth se o token é de uma sessão válida. Usado quando a
+  // requisição seria recusada antes de chegar ao banco (spec 003, CA-11:
+  // token inválido responde 401 antes de qualquer outra recusa).
+  async exigirSessaoValida(token: string): Promise<void> {
+    const { url, chavePublica } = lerConfigSupabase();
+    let resposta: Response;
+    try {
+      resposta = await fetch(`${url}/auth/v1/user`, {
+        headers: { apikey: chavePublica, Authorization: `Bearer ${token}` },
+      });
+    } catch {
+      throw erro('ERRO_INESPERADO');
+    }
+    if (resposta.status === 401 || resposta.status === 403) {
+      throw erro('NAO_AUTENTICADO');
+    }
+    if (!resposta.ok) {
+      throw erro('ERRO_INESPERADO');
+    }
+  }
+
   urlPublicaDaImagem(caminho: string, versao: number | string): string {
     const { url } = lerConfigSupabase();
     return `${url}/storage/v1/object/public/equipamentos/${encodeURIComponent(caminho)}?v=${versao}`;

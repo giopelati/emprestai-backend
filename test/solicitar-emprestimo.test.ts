@@ -138,6 +138,17 @@ describe('Spec 003 — solicitar empréstimo (API)', () => {
     const post = await api(null, 'POST', '/emprestimos', { equipamentoId: itens['TI-9000'].id });
     expect(post.status).toBe(401);
     expect(post.corpo.codigo).toBe('NAO_AUTENTICADO');
+
+    // Token inválido vence corpo malformado e corpo válido (rodada 1 do verificador).
+    for (const corpo of [{}, { equipamentoId: 'abc' }, { equipamentoId: itens['TI-9000'].id }]) {
+      const invalido = await api('token-invalido', 'POST', '/emprestimos', corpo);
+      expect(invalido.status).toBe(401);
+      expect(invalido.corpo).toEqual({
+        codigo: 'NAO_AUTENTICADO',
+        mensagem: MENSAGENS.NAO_AUTENTICADO,
+      });
+    }
+    expect(await emprestimosAbertos()).toEqual([]);
   });
 
   it('CA-11: pessoa sem papel válido recebe 403 com PAPEL_INVALIDO', async () => {
