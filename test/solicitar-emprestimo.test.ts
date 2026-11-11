@@ -83,9 +83,9 @@ async function semearEquipamentos(): Promise<Record<string, LinhaEquipamento>> {
     imagem_path: `TI-${9000 + i}.jpg`,
     foto_pexels_id: base + i,
     foto_fotografo: 'Teste',
-    foto_fotografo_url: 'https://www.pexels.com/@teste',
-    foto_pagina_url: `https://www.pexels.com/photo/${base + i}/`,
-    foto_licenca: 'Licença Pexels — https://www.pexels.com/license/',
+    foto_fotografo_url: 'https://www.flickr.com/photos/teste',
+    foto_pagina_url: `https://www.flickr.com/photos/teste/${base + i}`,
+    foto_licenca: 'CC BY 2.0 — https://creativecommons.org/licenses/by/2.0/',
   }));
   const criadas = await admin<LinhaEquipamento[]>('/rest/v1/equipamentos?select=id,patrimonio,situacao', {
     method: 'POST',
@@ -180,9 +180,9 @@ describe('Spec 003 — solicitar empréstimo (API)', () => {
       ),
       foto: {
         fotografo: 'Teste',
-        fotografoUrl: 'https://www.pexels.com/@teste',
-        paginaUrl: expect.stringMatching(/^https:\/\/www\.pexels\.com\/photo\//),
-        licenca: expect.stringContaining('Pexels'),
+        fotografoUrl: 'https://www.flickr.com/photos/teste',
+        paginaUrl: expect.stringMatching(/^https:\/\/www\.flickr\.com\/photos\//),
+        licenca: expect.stringContaining('CC BY'),
       },
     });
     expect(resposta.corpo.find((e: any) => e.patrimonio === 'TI-9007').situacao).toBe('manutencao');
